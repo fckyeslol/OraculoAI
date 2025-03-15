@@ -1,28 +1,47 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Oráculo Moderno</title>
-    <style>
-        .hidden { display: none; }
-        .response { margin-top: 20px; padding: 15px; background: #f0f0f0; }
-        body { max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; }
-        button { padding: 10px 20px; margin: 10px 0; }
-        textarea { width: 100%; padding: 10px; margin: 10px 0; }
-    </style>
+    <title>Enviar Miedos</title>
 </head>
 <body>
-    <h1>El Oráculo Moderno</h1>
-    <div id="chat-container">
-        <div id="question" class="question">
-            <p>El oráculo pregunta: "¿Cuáles son tus miedos más profundos?"</p>
-            <textarea id="userFears" rows="4" placeholder="Describe tus miedos aquí..."></textarea>
-            <button onclick="processFears()">Enviar al Oráculo</button>
-        </div>
-        <div id="response" class="response hidden"></div>
-    </div>
-    <script src="/static/animacion.js"></script>
+    <form id="miedoForm">
+        <input type="text" id="miedoInput" placeholder="Escribe tu miedo" required>
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="mensaje"></div>
+
+    <script>
+        async function enviarMiedos(miedos) {
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ miedos: miedos })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al enviar los miedos: ' + response.statusText);
+                }
+
+                const data = await response.json();
+                console.log('Respuesta de la API:', data);
+
+                // Display the prompt
+                document.getElementById("mensaje").textContent = "¿Qué soñaste el día de hoy?";
+            } catch (error) {
+                console.error('Se produjo un error:', error);
+            }
+        }
+
+        document.getElementById('miedoForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            const miedoInput = document.getElementById('miedoInput');
+            const miedos = miedoInput.value;
+            enviarMiedos(miedos);
+            miedoInput.value = ''; // Clear the input after sending
+        });
+    </script>
 </body>
 </html>
