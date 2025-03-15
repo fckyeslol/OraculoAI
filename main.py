@@ -22,6 +22,13 @@ def home():
 def analizar_miedos():
     data = request.get_json()
     miedos = data.get('miedos', '')
+    
+    # Store the fear
+    try:
+        with open('miedos.txt', 'a', encoding='utf-8') as f:
+            f.write(miedos + '\n')
+    except Exception as e:
+        print(f"Error storing fear: {e}")
 
     headers = {
         "Authorization": f"Bearer {API_KEY}",
@@ -54,19 +61,32 @@ def analizar_miedos():
 
 
 # Función para analizar los sueños
+def get_stored_fears():
+    stored_fears = []
+    try:
+        with open('miedos.txt', 'r', encoding='utf-8') as f:
+            stored_fears = f.readlines()
+    except FileNotFoundError:
+        pass
+    return [miedo.strip() for miedo in stored_fears if miedo.strip()]
+
 def analizar_sueño(descripcion_sueño):
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json"
     }
+    
+    miedos = get_stored_fears()
+    miedos_context = "No hay miedos registrados." if not miedos else f"Miedos conocidos: {', '.join(miedos)}"
+    
     data = {
         "model": "openai/gpt-3.5-turbo",
         "messages": [{
             "role": "system",
-            "content": "Eres un oráculo moderno, grosero y sarcástico que interpreta sueños dando respuestas de 15 lineas." #modificar la IA
+            "content": f"Eres un oráculo moderno que interpreta sueños. {miedos_context}. Usa estos miedos como contexto para interpretar los sueños de forma más precisa y personalizada. Da respuestas de 15 líneas."
         }, {
             "role": "user",
-            "content": f"Interpreta este sueño: {descripcion_sueño}"
+            "content": f"Interpreta este sueño considerando los miedos mencionados: {descripcion_sueño}"
         }]
     }
 
