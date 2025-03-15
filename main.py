@@ -39,4 +39,4 @@ def analizar_sueño(descripcion_sueño):
         return None
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=3000)  # Esto permite que el servidor sea accesible
+    app.run(host='0.0.0.0', port=3000)  
