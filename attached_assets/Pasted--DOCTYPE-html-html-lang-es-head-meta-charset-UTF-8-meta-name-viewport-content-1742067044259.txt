@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oráculo de los Sueños</title>
+    </head>
     <style>
         body {
             margin: 0;
@@ -17,12 +18,12 @@
             min-height: 100vh;
         }
 
-        .container {
-            display: flex;
-            min-height: 100vh;
-            flex-direction: row;
-            color: #fff;
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        .container { 
+            display: flex; 
+            min-height: 100vh; 
+            flex-direction: row; 
+            color: #fff; background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)
+        }
         }
 
         .left-section {
@@ -33,19 +34,11 @@
             justify-content: center;
             padding: 20px;
             min-width: 300px;
-          background-image: url('static/fondo.jpg');
-          background-size: cover;
-          background-position: center;
-          height: 100vh; /* Hace que ocupe toda la altura de la ventana */
-          display: flex;
-          justify-content: center;
-          align-items: center;
         }
 
-        .wizard-image {
-            max-width: 100%;
-            height: auto;
-            max-height: 500px;/static/mago
+        <div class="left-section">
+            <img src="/static/mago.png" alt="Mago" class="wizard-image">
+        </div>
         }
 
         .right-section {
@@ -207,19 +200,19 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
- </style>
+    </style>
 </head>
 <body>
     <nav class="main-nav">
         <ul>
-            <li><a href="#will-smith" onclick="cambiarImagen('will')">Will Smith</a></li>
-            <li><a href="#adam-sandler" onclick="cambiarImagen('adam')">Adam Sandler</a></li>
-            <li><a href="#jim-carrey" onclick="cambiarImagen('jim')">Jim Carrey</a></li>
+            <li><a href="#will-smith">Will Smith</a></li>
+            <li><a href="#adam-sandler">Adam Sandler</a></li>
+            <li><a href="#jim-carrey">Jim Carrey</a></li>
         </ul>
     </nav>
     <div class="container">
         <div class="left-section">
-            <img src="static/mago.png" alt="Mago" class="wizard-image">
+            <img src="/static/mago.png" alt="Mago" class="wizard-image">
         </div>
         <div class="right-section">
             <h1>Oráculo de los Sueños</h1>
@@ -247,32 +240,7 @@
         </div>
     </div>
 
-  
-  <audio controls autoplay>
-      <source src="static/audiooficial.mp3" type="audio/mpeg">
-      Tu navegador no soporta la etiqueta de audio.
-  </audio>
-  
-  
     <script>
-      let personajeActivo = 'wiz'
-      const img = document.querySelector('.wizard-image');
-
-      function cambiarImagen(personaje) {
-        personajeActivo = personaje
-          if(personaje == 'will') {
-              img.setAttribute('src', 'static/will smith.png')
-          } else if(personaje == 'adam') {
-            img.setAttribute('src', 'static/adam.png')
-          } else if(personaje == 'jim'){
-            img.setAttribute('src', 'static/jim_carrey.png')
-          } else {
-            img.setAttribute('src', 'static/mago.png')
-          }
-
-      }
-
-      
         function toggleSection(section) {
             const fearsSection = document.getElementById('fearsSection');
             const dreamsSection = document.getElementById('dreamsSection');
@@ -308,7 +276,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ sueno: sueno, personaje: personajeActivo})
+                    body: JSON.stringify({ sueno: sueno })
                 });
 
                 if (!response.ok) {

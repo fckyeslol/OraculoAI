@@ -43,3 +43,4 @@ document.getElementById('userFears')?.addEventListener('keypress', function(e) {
         processFears();
     }
 });
+win
