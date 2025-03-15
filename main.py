@@ -22,7 +22,7 @@ def home():
 def analizar_miedos():
     data = request.get_json()
     miedos = data.get('miedos', '')
-    
+
     # Store the fear
     try:
         with open('miedos.txt', 'a', encoding='utf-8') as f:
@@ -72,15 +72,14 @@ def get_stored_fears():
 
 def analizar_sueño(descripcion_sueño):
     try:
-        # Get stored fears
-        miedos = get_stored_fears()
-        miedos_context = "No hay miedos registrados." if not miedos else f"Miedos conocidos: {', '.join(miedos)}"
-        
         headers = {
             "Authorization": f"Bearer {API_KEY}",
             "Content-Type": "application/json"
         }
-        
+
+        miedos = get_stored_fears()
+        miedos_context = "No hay miedos registrados." if not miedos else f"Miedos conocidos: {', '.join(miedos)}"
+
         data = {
             "model": "openai/gpt-3.5-turbo",
             "messages": [{
@@ -95,16 +94,16 @@ def analizar_sueño(descripcion_sueño):
         response = requests.post(API_URL, headers=headers, json=data)
         response.raise_for_status()
         result = response.json()
-        
+
         # Store the dream and interpretation
         from datetime import datetime
         import json
         import os
-        
+
         os.makedirs('dreams', exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"dreams/dream_{timestamp}.json"
-        
+
         interpretacion = result['choices'][0]['message']['content']
         dream_data = {
             "fecha": datetime.now().isoformat(),
@@ -112,10 +111,10 @@ def analizar_sueño(descripcion_sueño):
             "interpretacion": interpretacion,
             "miedos_considerados": miedos
         }
-        
+
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(dream_data, f, ensure_ascii=False, indent=2)
-        
+
         return {"choices": [{"message": {"content": interpretacion}}]}
     except Exception as e:
         print(f"Error en analizar_sueño: {str(e)}")
@@ -128,10 +127,10 @@ def analizar_sueño(descripcion_sueño):
 def procesar_sueno():
     data = request.get_json()
     sueno = data.get('sueno', '')
-    
+
     if not sueno:
         return jsonify({"error": "No se proporcionó ningún sueño"}), 400
-        
+
     resultado = analizar_sueño(sueno)
     if resultado:
         return jsonify({
