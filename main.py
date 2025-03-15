@@ -10,7 +10,7 @@ load_dotenv()
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static', static_folder='.')
 
 
 @app.route('/')
