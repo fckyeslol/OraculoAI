@@ -30,6 +30,10 @@ def analizar_miedos():
     except Exception as e:
         print(f"Error storing fear: {e}")
 
+    # Get stored fears context
+    stored_fears = get_stored_fears()
+    miedos_context = "No hay miedos registrados." if not stored_fears else f"Miedos conocidos: {', '.join(stored_fears)}"
+
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json"
