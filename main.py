@@ -8,7 +8,9 @@ load_dotenv()
 
 # Configuración de la API de OpenRouter
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
-API_KEY = os.getenv("OPENROUTER_API_KEY")
+API_KEY = "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"
+
+print(API_KEY)
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
