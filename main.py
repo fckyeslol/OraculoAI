@@ -60,13 +60,10 @@ def analizar_sueño(descripcion_sueño):
         "Content-Type": "application/json"
     }
     data = {
-        "model":
-        "openai/gpt-3.5-turbo",
+        "model": "openai/gpt-3.5-turbo",
         "messages": [{
-            "role":
-            "system",
-            "content":
-            "Eres un oráculo moderno que interpreta sueños."
+            "role": "system",
+            "content": "Eres un oráculo moderno que interpreta sueños."
         }, {
             "role": "user",
             "content": f"Interpreta este sueño: {descripcion_sueño}"
@@ -76,10 +73,45 @@ def analizar_sueño(descripcion_sueño):
     try:
         response = requests.post(API_URL, headers=headers, json=data)
         response.raise_for_status()
-        return response.json()
+        result = response.json()
+        
+        # Guardar el sueño y su interpretación
+        from datetime import datetime
+        import json
+        import os
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"dreams/dream_{timestamp}.json"
+        
+        dream_data = {
+            "fecha": datetime.now().isoformat(),
+            "sueño": descripcion_sueño,
+            "interpretacion": result['choices'][0]['message']['content']
+        }
+        
+        os.makedirs('dreams', exist_ok=True)
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(dream_data, f, ensure_ascii=False, indent=2)
+            
+        return result
     except requests.exceptions.RequestException as e:
         print(f"Error al conectar con la API de OpenRouter: {e}")
         return None
+
+@app.route('/analizar-sueno', methods=['POST'])
+def procesar_sueno():
+    data = request.get_json()
+    sueno = data.get('sueno', '')
+    
+    if not sueno:
+        return jsonify({"error": "No se proporcionó ningún sueño"}), 400
+        
+    resultado = analizar_sueño(sueno)
+    if resultado:
+        return jsonify({
+            "respuesta": resultado['choices'][0]['message']['content']
+        })
+    return jsonify({"error": "Error al analizar el sueño"}), 500
 
 
 if __name__ == "__main__":

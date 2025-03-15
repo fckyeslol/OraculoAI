@@ -8,9 +8,54 @@
 <body>
     <form id="miedoForm">
         <input type="text" id="miedoInput" placeholder="Escribe tu miedo" required>
-        <button type="submit">Enviar</button>
+        <button type="submit">Enviar Miedo</button>
     </form>
     <div id="mensaje"></div>
+
+    <div style="margin-top: 20px;">
+        <h2>Análisis de Sueños</h2>
+        <textarea id="suenoInput" placeholder="Describe tu sueño aquí..." rows="4" style="width: 100%;"></textarea>
+        <button onclick="analizarSueno()">Analizar Sueño</button>
+        <div id="respuestaSueno"></div>
+    </div>
+
+    <script>
+        async function analizarSueno() {
+            const suenoInput = document.getElementById('suenoInput');
+            const respuestaDiv = document.getElementById('respuestaSueno');
+            const sueno = suenoInput.value.trim();
+
+            if (!sueno) {
+                alert('Por favor, describe tu sueño primero.');
+                return;
+            }
+
+            respuestaDiv.textContent = 'Analizando tu sueño...';
+
+            try {
+                const response = await fetch('/analizar-sueno', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sueno: sueno })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la comunicación');
+                }
+
+                const data = await response.json();
+                respuestaDiv.innerHTML = `
+                    <h3>Interpretación del Oráculo:</h3>
+                    <p>${data.respuesta}</p>
+                `;
+            } catch (error) {
+                respuestaDiv.textContent = 'Error al analizar el sueño. Inténtalo más tarde.';
+                console.error('Error:', error);
+            }
+        }
+    </script>
 
     <script>
         async function enviarMiedos(miedos) {
