@@ -118,6 +118,39 @@
             z-index: 3;
         }
 
+        .main-nav {
+            background: #16213e;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .main-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .main-nav a:hover {
+            color: #e94560;
+        }
+
+        .container {
+            padding-top: 60px;
+        }
+
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
@@ -129,6 +162,13 @@
     </style>
 </head>
 <body>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#will-smith">Will Smith</a></li>
+            <li><a href="#adam-sandler">Adam Sandler</a></li>
+            <li><a href="#jim-carrey">Jim Carrey</a></li>
+        </ul>
+    </nav>
     <div class="container">
         <div class="left-section">
             <img src="/static/generated-icon.png" alt="Mago" class="wizard-image">
