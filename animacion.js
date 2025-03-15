@@ -1,6 +1,6 @@
 async function enviarMiedos(miedos) {
   try {
-      const response = await fetch('https://tu-api.com/endpoint', {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'

@@ -1,4 +1,4 @@
-entrypoint = "app.py"
+entrypoint = "main.py"
 
 modules = ["python-3.11"]
 
