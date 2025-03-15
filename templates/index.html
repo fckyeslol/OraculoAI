@@ -38,6 +38,8 @@
             flex: 1;
             padding: 40px;
             background: #1a1a2e;
+            position: relative;
+            overflow: hidden;
         }
 
         h1 {
@@ -50,6 +52,29 @@
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 30px;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            position: absolute;
+            width: calc(100% - 80px);
+        }
+
+        .input-section.active {
+            transform: translateX(0);
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .input-section.inactive {
+            transform: translateX(100%);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .fears-section {
+            top: 100px;
+        }
+
+        .dreams-section {
+            top: 100px;
         }
 
         input, textarea {
@@ -85,6 +110,22 @@
             border-radius: 5px;
             line-height: 1.6;
         }
+
+        .nav-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 3;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -95,7 +136,7 @@
         <div class="right-section">
             <h1>Oráculo de los Sueños</h1>
             
-            <div class="input-section">
+            <div id="fearsSection" class="input-section fears-section active">
                 <h2>Comparte tus Miedos</h2>
                 <form id="miedoForm">
                     <input type="text" id="miedoInput" placeholder="Escribe tu miedo" required>
@@ -104,16 +145,38 @@
                 <div id="mensaje"></div>
             </div>
 
-            <div class="input-section">
+            <div id="dreamsSection" class="input-section dreams-section inactive">
                 <h2>Análisis de Sueños</h2>
                 <textarea id="suenoInput" placeholder="Describe tu sueño aquí..." rows="4"></textarea>
                 <button onclick="analizarSueno()">Analizar Sueño</button>
                 <div id="respuestaSueno"></div>
             </div>
+
+            <div class="nav-buttons">
+                <button onclick="toggleSection('fears')" id="fearsButton">Miedos</button>
+                <button onclick="toggleSection('dreams')" id="dreamsButton">Sueños</button>
+            </div>
         </div>
     </div>
 
     <script>
+        function toggleSection(section) {
+            const fearsSection = document.getElementById('fearsSection');
+            const dreamsSection = document.getElementById('dreamsSection');
+
+            if (section === 'fears') {
+                fearsSection.classList.remove('inactive');
+                fearsSection.classList.add('active');
+                dreamsSection.classList.remove('active');
+                dreamsSection.classList.add('inactive');
+            } else {
+                dreamsSection.classList.remove('inactive');
+                dreamsSection.classList.add('active');
+                fearsSection.classList.remove('active');
+                fearsSection.classList.add('inactive');
+            }
+        }
+
         async function analizarSueno() {
             const suenoInput = document.getElementById('suenoInput');
             const respuestaDiv = document.getElementById('respuestaSueno');
@@ -142,7 +205,7 @@
                 const data = await response.json();
                 respuestaDiv.innerHTML = `
                     <h3>Interpretación del Oráculo:</h3>
-                    <p>${data.respuesta}</p>
+                    <p class="fade-in">${data.respuesta}</p>
                 `;
             } catch (error) {
                 respuestaDiv.textContent = 'Error al analizar el sueño. Inténtalo más tarde.';
@@ -163,10 +226,16 @@
                 }
 
                 const data = await response.json();
-                document.getElementById("mensaje").innerHTML = `
+                const mensajeDiv = document.getElementById("mensaje");
+                mensajeDiv.innerHTML = `
                     <p>Respuesta del oráculo:</p>
-                    <p>${data.respuesta}</p>
+                    <p class="fade-in">${data.respuesta}</p>
                 `;
+
+                // Automatic transition to dreams section after fear response
+                setTimeout(() => {
+                    toggleSection('dreams');
+                }, 3000);
             } catch (error) {
                 console.error('Se produjo un error:', error);
                 document.getElementById("mensaje").textContent = "Error al procesar los miedos. Inténtalo de nuevo.";
