@@ -71,49 +71,55 @@ def get_stored_fears():
     return [miedo.strip() for miedo in stored_fears if miedo.strip()]
 
 def analizar_sueño(descripcion_sueño):
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
-    
-    miedos = get_stored_fears()
-    miedos_context = "No hay miedos registrados." if not miedos else f"Miedos conocidos: {', '.join(miedos)}"
-    
-    data = {
-        "model": "openai/gpt-3.5-turbo",
-        "messages": [{
-            "role": "system",
-            "content": f"Eres un oráculo moderno que interpreta sueños. {miedos_context}. Usa estos miedos como contexto para interpretar los sueños de forma más precisa y personalizada. Da respuestas de 15 líneas."
-        }, {
-            "role": "user",
-            "content": f"Interpreta este sueño considerando los miedos mencionados: {descripcion_sueño}"
-        }]
-    }
-
     try:
+        # Get stored fears
+        miedos = get_stored_fears()
+        miedos_context = "No hay miedos registrados." if not miedos else f"Miedos conocidos: {', '.join(miedos)}"
+        
+        headers = {
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
+        }
+        
+        data = {
+            "model": "openai/gpt-3.5-turbo",
+            "messages": [{
+                "role": "system",
+                "content": f"Eres un oráculo moderno, malo y sarcástico que interpreta sueños. {miedos_context}. Usa estos miedos como contexto para dar una interpretación aterradora del sueño. Da respuestas de 15 líneas."
+            }, {
+                "role": "user",
+                "content": f"Interpreta este sueño considerando los miedos mencionados: {descripcion_sueño}"
+            }]
+        }
+
         response = requests.post(API_URL, headers=headers, json=data)
         response.raise_for_status()
         result = response.json()
         
-        # Guardar el sueño y su interpretación
+        # Store the dream and interpretation
         from datetime import datetime
         import json
         import os
         
+        os.makedirs('dreams', exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"dreams/dream_{timestamp}.json"
         
+        interpretacion = result['choices'][0]['message']['content']
         dream_data = {
             "fecha": datetime.now().isoformat(),
             "sueño": descripcion_sueño,
-            "interpretacion": result['choices'][0]['message']['content']
+            "interpretacion": interpretacion,
+            "miedos_considerados": miedos
         }
         
-        os.makedirs('dreams', exist_ok=True)
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(dream_data, f, ensure_ascii=False, indent=2)
-            
-        return result
+        
+        return {"choices": [{"message": {"content": interpretacion}}]}
+    except Exception as e:
+        print(f"Error en analizar_sueño: {str(e)}")
+        return None
     except requests.exceptions.RequestException as e:
         print(f"Error al conectar con la API de OpenRouter: {e}")
         return None
