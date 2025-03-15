@@ -35,12 +35,12 @@ def analizar_miedos():
             "role":
             "system",
             "content":
-            "Eres un oráculo sabio que ayuda a las personas a entender y superar sus miedos."
+            "Eres un oráculo malo, te gusta que la gente sufra con sus miedos."
         }, {
             "role":
             "user",
             "content":
-            f"Analiza estos miedos y proporciona una respuesta reconfortante y útil: {miedos}"
+            f"Analiza estos miedos y proporciona una respuesta que le de mucho miedo y tristeza: {miedos}"
         }]    }
 
     try:
@@ -63,7 +63,7 @@ def analizar_sueño(descripcion_sueño):
         "model": "openai/gpt-3.5-turbo",
         "messages": [{
             "role": "system",
-            "content": "Eres un oráculo moderno que interpreta sueños."
+            "content": "Eres un oráculo moderno, grosero y sarcástico que interpreta sueños dando respuestas de 15 lineas." #modificar la IA
         }, {
             "role": "user",
             "content": f"Interpreta este sueño: {descripcion_sueño}"
