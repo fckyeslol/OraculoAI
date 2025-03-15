@@ -62,13 +62,12 @@ def analizar_miedos():
 
 # Función para analizar los sueños
 def get_stored_fears():
-    stored_fears = []
     try:
         with open('miedos.txt', 'r', encoding='utf-8') as f:
-            stored_fears = f.readlines()
+            fears = [line.strip() for line in f if line.strip()]
+            return [fears[-1]] if fears else []
     except FileNotFoundError:
-        pass
-    return [miedo.strip() for miedo in stored_fears if miedo.strip()]
+        return []
 
 def analizar_sueño(descripcion_sueño):
     try:
