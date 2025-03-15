@@ -1,0 +1,7 @@
+.wizard-image {
+    background-image: url('will smith.png'); /* Adjust this path if necessary */
+    background-size: cover; /* Ensures the image covers the entire area */
+    width: 100%; /* Adjust to your desired width */
+    height: 400px; /* Adjust to your desired height */
+    background-position: center; /* Center the image */
+}
