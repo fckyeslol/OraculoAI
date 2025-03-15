@@ -18,6 +18,7 @@
         .container {
             display: flex;
             min-height: 100vh;
+            flex-direction: row;
         }
 
         .left-section {
@@ -27,11 +28,13 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            min-width: 300px;
         }
 
         .wizard-image {
             max-width: 100%;
             height: auto;
+            max-height: 500px;
         }
 
         .right-section {
@@ -40,6 +43,38 @@
             background: #1a1a2e;
             position: relative;
             overflow: hidden;
+            min-width: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-section, .right-section {
+                flex: none;
+                width: 100%;
+            }
+
+            .right-section {
+                padding: 20px;
+            }
+
+            .wizard-image {
+                max-height: 300px;
+            }
+
+            .main-nav ul {
+                gap: 1rem;
+            }
+
+            .main-nav a {
+                font-size: 1rem;
+            }
+
+            .input-section {
+                width: calc(100% - 40px);
+            }
         }
 
         h1 {
