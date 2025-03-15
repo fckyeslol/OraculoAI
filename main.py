@@ -47,7 +47,7 @@ def analizar_miedos():
             "role":
             "user",
             "content":
-            f"Analiza estos miedos y proporciona una respuesta que le de mucho miedo y tristeza: {miedos}"
+            f"Analiza estos miedos y proporciona una respuesta que dé mucho miedo, tristeza y la persona se ofenda: {miedos}"
         }]    }
 
     try:
@@ -84,10 +84,10 @@ def analizar_sueño(descripcion_sueño):
             "model": "openai/gpt-3.5-turbo",
             "messages": [{
                 "role": "system",
-                "content": f"Eres un oráculo moderno, malo y sarcástico que interpreta sueños. {miedos_context}. Usa estos miedos como contexto para dar una interpretación aterradora del sueño. Da respuestas de 15 líneas."
+                "content": f"Eres un oráculo moderno, malo y sarcástico que interpreta sueños. {miedos_context}. Usa estos miedos como contexto para dar una interpretación miedosa y grosera del sueño. Da respuestas de 15 líneas."
             }, {
                 "role": "user",
-                "content": f"Interpreta este sueño considerando los miedos mencionados: {descripcion_sueño}"
+                "content": f"Interpreta este sueño considerando los miedos mencionadosy siendo muy grosero: {descripcion_sueño}"
             }]
         }
 
